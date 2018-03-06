@@ -22,10 +22,9 @@ if __name__ == '__main__':
         knn = KNeighborsClassifier(n_neighbors=k)
         knn.fit(X_train, y_train)
         y_predict = knn.predict(X_test)
-        scores.append(metrics.accuracy_score(y_test,y_predict))
+        scores.append(metrics.accuracy_score(y_test, y_predict))
 
-
-    plt.plot(k_range,scores)
+    plt.plot(k_range, scores)
     plt.xlabel("Value of K for KNN")
     plt.ylabel("Testing Accuracy")
     plt.show()
