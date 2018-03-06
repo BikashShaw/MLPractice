@@ -10,7 +10,6 @@ if __name__ == '__main__':
 
     k_range = range(1, 31)
 
-
     param_grid = dict(n_neighbors=k_range)
     knn = KNeighborsClassifier()
     grid = GridSearchCV(knn, param_grid, cv=10, scoring='accuracy')
@@ -45,4 +44,3 @@ if __name__ == '__main__':
         r_grid.fit(X, y)
         print(r_grid.best_score_)
         print(grid.predict([[3, 5, 4, 2]]))
-
