@@ -1,8 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-
 from sklearn import metrics
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import binarize
 
 if __name__ == '__main__':
     url = 'https://raw.githubusercontent.com/yew1eb/machine-learning/master/Naive-bayes/pima-indians-diabetes.data.csv'
@@ -45,7 +46,6 @@ if __name__ == '__main__':
     print('Classification Accuracy: ', (TP + TN) / float(TP + TN + FP + FN))
     print('Classification Accuracy:', metrics.accuracy_score(y_test, y_predict))
 
-
     print('Classification Error: ', (FP + FN) / float(TP + TN + FP + FN))
     print('Classification Error:', 1 - metrics.accuracy_score(y_test, y_predict))
 
@@ -56,5 +56,29 @@ if __name__ == '__main__':
 
     print('False Positive Rate:', FP / float(FP + TN))
 
-    print('Precision (Rate of correct positive prediction):', (TP) / float(TP + FP))
-    print('Precision (Rate of correct positive prediction):', metrics.precision_score(y_test,y_predict))
+    print('Precision (Rate of correct positive prediction):', (TP / float(TP + FP)))
+    print('Precision (Rate of correct positive prediction):', metrics.precision_score(y_test, y_predict))
+
+    print(logreg.predict(X_test)[0:20])
+    y_predict_proba = logreg.predict_proba(X_test)[:, 1]
+    print(y_predict_proba)
+
+    plt.rcParams['font.size'] = 14
+    plt.hist(y_predict_proba, bins=8)
+    plt.xlim(0, 1)
+    plt.title("Histogram of predicted probabilities")
+    plt.xlabel("Predicted probability of diabetes")
+    plt.ylabel("Frequency")
+    plt.show()
+
+    y_predict = binarize([y_predict_proba], 0.3)[0]
+
+    print('True:', y_test.values[0:25])
+    print('Pred:', y_predict[0:25])
+    confusion = metrics.confusion_matrix(y_test, y_predict)
+    print('Confusion Matrix:\n', confusion)
+
+    print('Classification Accuracy:', metrics.accuracy_score(y_test, y_predict))
+    print('Classification Error:', 1 - metrics.accuracy_score(y_test, y_predict))
+    print('Sensitivity (True Positive Rate):', metrics.recall_score(y_test, y_predict))
+    print('Precision (Rate of correct positive prediction):', metrics.precision_score(y_test, y_predict))
