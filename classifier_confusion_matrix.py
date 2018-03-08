@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import binarize
+from sklearn.model_selection import cross_val_score
 
 if __name__ == '__main__':
     url = 'https://raw.githubusercontent.com/yew1eb/machine-learning/master/Naive-bayes/pima-indians-diabetes.data.csv'
@@ -82,3 +83,18 @@ if __name__ == '__main__':
     print('Classification Error:', 1 - metrics.accuracy_score(y_test, y_predict))
     print('Sensitivity (True Positive Rate):', metrics.recall_score(y_test, y_predict))
     print('Precision (Rate of correct positive prediction):', metrics.precision_score(y_test, y_predict))
+
+    # The ROC curve is created by plotting the true positive rate (TPR) against the false positive rate (FPR) at various threshold settings.
+    falsePositiveRate, truePositiveRate, threshold = metrics.roc_curve(y_test, y_predict_proba)
+
+    plt.plot(falsePositiveRate, truePositiveRate)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.0])
+    plt.title('ROC curve for diabetes classifier')
+    plt.xlabel('False Positive Rate (1 - Specificity)')
+    plt.ylabel('True Positive Rate (Sensitivity)')
+    plt.grid(True)
+    plt.show()
+
+    # AUC is useful as a single number summary of classifier performance.
+    print('Area Under the Curve (AUC):', cross_val_score(logreg, X, y, cv=10, scoring='roc_auc').mean())
